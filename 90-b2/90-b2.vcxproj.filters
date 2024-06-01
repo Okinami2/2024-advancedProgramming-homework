@@ -18,7 +18,7 @@
     <ClInclude Include="magic_ball.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="E:\download\大一下\23242-900101-W0901.综合题 - 第01题 - 汉诺塔综合演示（5.16截止）\23242-900101-W0901.综合题 - 第01题 - 汉诺塔综合演示（5.16截止）\cmd_console_tools.h">
+    <ClInclude Include="cmd_console_tools.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
