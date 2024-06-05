@@ -1,6 +1,7 @@
 /* 2352219 陈应波 信11 */
 #include<iostream>
 #include"magic_ball.h"
+#include"cmd_console_tools.h"
 #include<ctime>
 #include <cstdlib>
 
@@ -10,10 +11,11 @@ int main()
 {
 	//生成随机数种子
 	 srand(static_cast<unsigned int>(time(nullptr)));
+	 //cct_setconsoleborder();
+	 cct_setfontsize("新宋体",24);
 	int in;
-	in = menu();
-	while (in != 0) {
-
+	do{
+		in = menu();
 		switch (in)
 		{
 			case 1:
@@ -21,9 +23,11 @@ int main()
 				break;
 
 			case 2:
+				fun2();
 				break;
 
 			case 3:
+				fun3();
 				break;
 
 			case 4:
@@ -44,6 +48,7 @@ int main()
 			case 9:
 				break;
 		}
-	}
+	} while (in != 0);
+
 	return 0;
 }

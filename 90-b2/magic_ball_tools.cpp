@@ -20,12 +20,31 @@ void halt(char in, const char *out) {
 	}
 
 }
+
+void theEnd() {
+	std::cout << "本小题结束，请输入End继续...";
+	int x = 0, y = 0;
+	cct_getxy(x, y);
+	while (true) {
+		char in[255] = { 0 };
+		std::cin >> in;
+		if ((in[0] == 'E' || in[0] == 'e') && (in[1] == 'N' || in[1] == 'n') && (in[2] == 'D' || in[2] == 'd'))
+			break;
+		else {
+			std::cin.clear();
+			std::cin.ignore(65535, '\n');
+			std::cout << std::endl << "输入错误，请重新输入";
+			cct_showch(x, y, ' ', 0, 7, 10);
+			cct_gotoxy(x, y);
+		}
+	}
+}
 /*
 begin:the range's begin
 end:the range's end
 */
 int randomInt(int begin, int end) {
-	return rand() % (begin + end + 1) + begin;
+	return rand() % (end - begin + 1) + begin;
 }
 
 void scanRowAndCol(int *row, int * col) {
@@ -51,17 +70,33 @@ void scanRowAndCol(int *row, int * col) {
 	}
 }
 
+int removable(int arr[][9], int x, int y,int row,int col) {
+	if ((y + 2 < row)&&arr[x][y] == arr[x][y + 1] && arr[x][y] == arr[x][y + 2])
+		return 1;
+	if ((y - 1 >= 0 && y + 1 < row)&&arr[x][y] == arr[x][y - 1] && arr[x][y] == arr[x][y + 1])
+		return 1; 
+	if ((x + 2 < col)&&arr[x][y] == arr[x + 1][y] && arr[x][y] == arr[x + 2][y])
+		return 1;
+	if ((x - 1 >= 0 && x + 1 < col) && arr[x][y] == arr[x - 1][y] && arr[x][y] == arr[x + 1][y])
+		return 1;
+	if ((y - 2 >= 0)&&arr[x][y] == arr[x][y - 2] && arr[x][y] == arr[x][y - 1])
+		return 1;
+	if ((x - 2 >= 0)&&arr[x][y] == arr[x - 2][y] && arr[x][y] == arr[x - 1][y])
+		return 1;
+	return 0;
+}
+
 void initArr(int arr[][9], int row, int col) {
 	for (int i = 0; i < row; i++)
 	{
 		for (int j = 0; j < col; j++)
 		{
-			arr[i][j] = randomInt(0,9);
+			arr[i][j] = randomInt(1,9);
 		}
 	}
 }
 
-void showArr(int arr[9][9], int row, int col) {
+void showArr(int arr[9][9], int row, int col, int showDifferent) {
 	for (int i = 0; i < row + 2; i++)
 	{
 		if (i == 0)
@@ -76,30 +111,137 @@ void showArr(int arr[9][9], int row, int col) {
 				std::cout << j + 1 << ' ';
 			else if (i == 1)
 				std::cout << "--";
-			else 
+			else if (showDifferent) {
+				if (removable(arr, i - 2, j,row,col)) {
+					cct_setcolor(14, 7);
+					std::cout << arr[i - 2][j];
+					cct_setcolor(0, 7);
+					std::cout << ' ';
+				}
+				else
+					std::cout << arr[i - 2][j] << ' ';
+			}
+			else
 				std::cout << arr[i - 2][j] << ' ';
 		}
 		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 }
 
-void select(int arr[][9], int row, int col) {
-	showArr(arr, row, col);
-
-	for (int i = 0; i < row - 3; i++)
+void drop(int arr[][9], int row, int col) {
+	int tmp[9][9];
+	for (int i = 0; i < 9; i++)
+		for (int j = 0; j < 9; j++)
+			tmp[i][j] = arr[i][j];
+	for (int i = 0; i < row; i++)
 	{
-		for (int j = 0; j < col - 3; j++)
+		for (int j = 0; j < col; j++)
 		{
-			if (arr[i][j] == arr[i][j + 1] && arr[i][j] == arr[i][j + 2]) {
-				cct_showch();
-				cct_showch();
-				cct_showch();
-			}
-			if (arr[i][j] == arr[i + 1][j] && arr[i][j] == arr[i + 2][j]) {
-				cct_showch();
-				cct_showch();
-				cct_showch();
+			if (removable(arr, i, j,row,col)) {
+				for (int k = i; k > 0; k--) {
+					tmp[k][j] = tmp[k - 1][j];
+				}
+				tmp[0][j] = 0;
 			}
 		}
 	}
+	for (int i = 0; i < 9; i++)
+		for (int j = 0; j < 9; j++)
+			arr[i][j] = tmp[i][j];
+	int x, y;
+	cct_getxy(x, y);
+	x += 4;
+	y += 2;
+	showArr(arr, row, col, 0);
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			if (arr[i][j] == 0)
+				cct_showch(x + j * 2, y + i, '0', 14, 7, 1);
+		}
+	}
+	cct_gotoxy(0, y + row + 1);
+	cct_setcolor(0, 7);
+	std::cout << std::endl;
+}
+
+void fill(int arr[][9], int row, int col) {
+	int x, y;
+	cct_getxy(x, y);
+	x += 4;
+	y += 2;
+	showArr(arr, row, col, 0);
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+			if (arr[i][j] == 0) {
+				arr[i][j] = randomInt(1, 9);
+				cct_showch(x + j * 2, y + i, arr[i][j] + '0', 14, 7, 1);
+			}
+	cct_gotoxy(0, y + row + 1);
+	cct_setcolor(0, 7);
+	std::cout << std::endl;
+}
+
+int isFinish(int arr[][9], int row, int col) {
+	int flag = 1;
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+			if (removable(arr, i, j,row,col))
+				flag = 0;
+	return flag;
+}
+
+void results(int arr[][9], int rs[][4], int row, int col) {
+	int p = 0;
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			int temp = arr[i][j];
+			if (j < col - 1) {
+				arr[i][j] = arr[i][j + 1];
+				arr[i][j + 1] = temp;
+				if (removable(arr, i, j,row,col) || removable(arr, i, j + 1,row,col)) {
+					rs[p][0] = i;
+					rs[p][1] = j;
+					rs[p][2] = i;
+					rs[p][3] = j + 1;
+					p++;
+				}
+				arr[i][j + 1] = arr[i][j];
+				arr[i][j] = temp;
+			}
+			if (i < row - 1) {
+				temp = arr[i][j];
+				arr[i][j] = arr[i + 1][j];
+				arr[i + 1][j] = temp;
+				if (removable(arr, i, j,row,col)|| removable(arr, i + 1, j,row,col)) {
+					rs[p][0] = i;
+					rs[p][1] = j;
+					rs[p][2] = i + 1;
+					rs[p][3] = j;
+					p++;
+				}
+				arr[i + 1][j] = arr[i][j];
+				arr[i][j] = temp;
+			}
+		}
+	}
+}
+
+void showRs(int arr[][9], int row, int col, int rs[][4]) {
+	int x, y;
+	cct_getxy(x, y);
+	x += 4;
+	y += 2;
+	showArr(arr, row, col, 0);
+	for (int i = 0; i < 20; i++)
+	{
+		if (rs[i][0] == -1)
+			break;
+		cct_showch(x + rs[i][1] * 2, y + rs[i][0], arr[rs[i][0]][rs[i][1]] + '0', 14, 7, 1);
+		cct_showch(x + rs[i][3] * 2, y + rs[i][2], arr[rs[i][2]][rs[i][3]] + '0', 14, 7, 1);
+	}
+	cct_gotoxy(0, y + row + 1);
+	cct_setcolor(0,7);
 }
