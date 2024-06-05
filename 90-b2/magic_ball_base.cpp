@@ -67,3 +67,29 @@ void fun3() {
 	showRs(arr,row,col,rs);
 	theEnd();
 }
+
+void fun4() {
+	int row = 0, col = 0;
+	scanRowAndCol(&row, &col);
+	int arr[9][9];
+	initArr(arr, row, col);
+	cout << "初始数组：" << endl;
+	showArr(arr, row, col, 0);
+	halt('\r',"按回车键显示图形...");
+	showGraph(arr, row, col, 0);
+	showBall(arr, row, col, 0);
+	theEnd();
+}
+
+void fun5() {
+	int row = 0, col = 0;
+	scanRowAndCol(&row, &col);
+	int arr[9][9];
+	initArr(arr, row, col);
+	cout << "初始数组：" << endl;
+	showArr(arr, row, col, 0);
+	halt('\r', "按回车键显示图形...");
+	showGraph(arr, row, col, 1);
+	showBall(arr, row, col, 1);
+	theEnd();
+}

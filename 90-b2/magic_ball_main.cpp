@@ -12,9 +12,10 @@ int main()
 	//生成随机数种子
 	 srand(static_cast<unsigned int>(time(nullptr)));
 	 //cct_setconsoleborder();
-	 cct_setfontsize("新宋体",24);
 	int in;
 	do{
+		cct_setconsoleborder(120, 30);
+		cct_setfontsize("新宋体", 24);
 		in = menu();
 		switch (in)
 		{
@@ -31,9 +32,11 @@ int main()
 				break;
 
 			case 4:
+				fun4();
 				break;
 
 			case 5:
+				fun5();
 				break;
 
 			case 6:

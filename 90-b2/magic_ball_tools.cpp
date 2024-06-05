@@ -23,7 +23,7 @@ void halt(char in, const char *out) {
 
 void theEnd() {
 	std::cout << "本小题结束，请输入End继续...";
-	int x = 0, y = 0;
+	int x, y;
 	cct_getxy(x, y);
 	while (true) {
 		char in[255] = { 0 };
@@ -49,7 +49,7 @@ int randomInt(int begin, int end) {
 
 void scanRowAndCol(int *row, int * col) {
 	using namespace std;
-
+	cct_cls();
 	while (true) {
 		cout << "请输入行数(5-9)：" << endl;
 		cin >> *row;
