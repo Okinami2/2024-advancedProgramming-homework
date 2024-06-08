@@ -8,15 +8,17 @@ in:keeping reading until read this char
 out:remind customers
 */
 void halt(char in, const char *out) {
+	int x, y;
+	cct_getxy(x,y);
+	cct_showch(x,y,' ',0,7,40);
+	cct_gotoxy(x,y);
 	if(out != NULL)
 	    std::cout << out;
 	char read;
 	while (true) {
 		read = _getch();
-		if (read == in) {
-			std::cout << "\n";
+		if (read == in) 
 			break;
-		}
 	}
 
 }

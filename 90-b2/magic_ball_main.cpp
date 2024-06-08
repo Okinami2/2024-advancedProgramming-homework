@@ -40,12 +40,15 @@ int main()
 				break;
 
 			case 6:
+				fun6();
 				break;
 
 			case 7:
+				fun7();
 				break;
 
 			case 8:
+				fun8();
 				break;
 
 			case 9:
