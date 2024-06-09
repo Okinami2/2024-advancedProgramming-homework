@@ -154,29 +154,54 @@ void fun8() {
 		fillBall(arr, row, col, 1);
 	}
 	Sleep(100);
-	hint(arr, row, col, 1); 
-	int rs[20][4];
-	for (int i = 0; i < 20; i++)
-		for (int j = 0; j < 4; j++)
-			rs[i][j] = -1;
-	results(arr, rs, row, col);
-	cct_showstr(14, 0, "(当前分数：0 右键退出)");
-	cct_gotoxy(0, 2 + 2 * row);
-	cct_enable_mouse();
-	int mX, mY, mAction, kValue1, kValue2;
-	do {
-		cct_read_keyboard_and_mouse(mX, mY, mAction, kValue1, kValue2);
-		int v1, v2;
-		if (positionValid(arr, rs, mX, mY, &v1, &v2)) {
-			cct_showch(0, 2 + 2 * row, ' ', 0, 7, 40);
-			cct_showstr(0, 2 + 2 * row, "[当前光标] ", 0, 7, -1);
-			cout << char(v1 + 'A') << "行" << char(v2 + '1') << "列";
+	if (hint(arr, row, col, 1)) {
+		int v1 = 0, v2 = 0;
+		if (select(arr, row, col, &v1, &v2)) {
+			Sleep(500);
+		}
+	}
+	else {
+		cct_showstr(14, 0, "(已无可消除项，游戏结束！)");
+	}
+	cct_showch(0, 2 + 2 * row, ' ', 0, 7, 40);
+	theEnd();
+}
+
+void fun9() {
+	int row = 0, col = 0;
+	scanRowAndCol(&row, &col);
+	int arr[9][9];
+	initArr(arr, row, col);
+	showArr(arr, row, col, 0);
+	showGraph(arr, row, col, 1);
+	Sleep(100);
+	showBall(arr, row, col, 1, 1);
+	while (!isFinish(arr, row, col)) {
+		Sleep(100);
+		dropBall(arr, row, col, 1);
+		Sleep(100);
+		fillBall(arr, row, col, 1);
+	}
+
+	Sleep(100);
+	while (hint(arr, row, col, 1)) {
+		int v1 = 0, v2 = 0;
+		if (select(arr, row, col, &v1, &v2)) {
+			int v3 = 0, v4 = 0;
+			select(arr, row, col, &v3, &v4);
+			if (v1 == v3 && v2 == v4)
+				cct_showstr(2 + v2 * 4, 2 + v1 * 2, "◎", arr[v1][v2], 7);
+			else {
+				change(arr, row, col, v1, v2, v3, v4);
+			}
 		}
 		else {
 			cct_showch(0, 2 + 2 * row, ' ', 0, 7, 40);
-			cct_showstr(0, 2 + 2 * row, "[当前光标] 位置非法", 0, 7, -1);
+			theEnd();
+			return;
 		}
-	} while (mAction != MOUSE_RIGHT_BUTTON_CLICK);
+	}
+	cct_showstr(14, 0, "(已无可消除项，游戏结束！)");
 	cct_showch(0, 2 + 2 * row, ' ', 0, 7, 40);
 	theEnd();
 }

@@ -135,7 +135,7 @@ void fillBall(int arr[][9], int row, int col, int hasBorder) {
 	cct_gotoxy(0, 3 + row + 8 * hasBorder);
 }
 
-void hint(int arr[][9], int row, int col, int hasBorder) {
+int hint(int arr[][9], int row, int col, int hasBorder) {
 	int rs[20][4];
 	for (int i = 0; i < 20; i++)
 		for (int j = 0; j < 4; j++)
@@ -151,25 +151,117 @@ void hint(int arr[][9], int row, int col, int hasBorder) {
 	}
 	cct_setcolor(0, 7);
 	cct_gotoxy(0, 3 + row + 8 * hasBorder);
+	return rs[0][0] != -1;
 }
-int positionValid(int arr[][9], int rs[][4], int mX, int mY, int *v1, int *v2) {
+int positionValid(int arr[][9], int row, int col, int mX, int mY, int *v1, int *v2) {
 	int flag = 0;
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			if (mX == 2 + j * 4 && mY == 2 + i * 2) {
+				*v1 = i;
+				*v2 = j;
+				flag = 1;
+				break;
+			}
+		}
+	}
+	return flag;
+}
+
+int canSelect(int arr[][9], int row, int col, int mX, int mY) {
+	int flag = 0;
+	int rs[20][4];
+	for (int i = 0; i < 20; i++)
+		for (int j = 0; j < 4; j++)
+			rs[i][j] = -1;
+	results(arr,rs,row,col);
 	for (int i = 0; i < 20; i++)
 	{
 		if (rs[i][0] == -1)
 			break;
 		if (mX == 2 + rs[i][1] * 4 && mY == 2 + rs[i][0] * 2) {
-			*v1 = rs[i][0];
-			*v2 = rs[i][1];
 			flag = 1;
 			break;
 		}
 		if (mX == 2 + rs[i][3] * 4 && mY == 2 + rs[i][2] * 2) {
-			*v1 = rs[i][2];
-			*v2 = rs[i][3];
 			flag = 1;
 			break;
 		}
 	}
 	return flag;
+}
+
+int select(int arr[][9], int row, int col, int *v1, int *v2) {
+	int score = 0;
+	int rs[20][4];
+	for (int i = 0; i < 20; i++)
+		for (int j = 0; j < 4; j++)
+			rs[i][j] = -1;
+	results(arr, rs, row, col);
+	cct_showstr(14, 0, "(当前分数：0 右键退出)");
+	cct_gotoxy(0, 2 + 2 * row);
+	cct_enable_mouse();
+	int mX, mY, mAction, kValue1, kValue2;
+	while(true){
+		cct_read_keyboard_and_mouse(mX, mY, mAction, kValue1, kValue2);
+		if (positionValid(arr, row, col, mX, mY, v1, v2)) {
+			cct_showch(0, 2 + 2 * row, ' ', 0, 7, 40);
+			cct_showstr(0, 2 + 2 * row, "[当前光标] ", 0, 7, -1);
+			cout << char(*v1 + 'A') << "行" << char(*v2 + '1') << "列";
+			if (mAction == MOUSE_LEFT_BUTTON_CLICK) {
+				if (canSelect(arr, row, col, mX, mY)) {
+					cct_showstr(2 + *v2 * 4, 2 + *v1 * 2, "◎", arr[*v1][*v2], 7);
+					cct_showch(0, 2 + 2 * row, ' ', 0, 7, 40);
+					cct_showstr(0, 2 + 2 * row, "当前选择", 0, 7, -1);
+					cout << char(*v1 + 'A') << "行" << char(*v2 + '1') << "列";
+					return 1;
+				}
+				else {
+					cct_showch(0, 2 + 2 * row, ' ', 0, 7, 40);
+					cct_showstr(0, 2 + 2 * row, "不能选择", 0, 7, -1);
+					cout << char(*v1 + 'A') << "行" << char(*v2 + '1') << "列";
+				}
+			}
+			else if (mAction == MOUSE_RIGHT_BUTTON_CLICK) {
+				return 0;
+			}
+		}
+		else {
+			cct_showch(0, 2 + 2 * row, ' ', 0, 7, 40);
+			cct_showstr(0, 2 + 2 * row, "[当前光标] 位置非法", 0, 7, -1);
+		}
+	}
+}
+
+void change(int arr[][9], int row, int col, int v1, int v2, int v3, int v4) {
+	int rs[20][4];
+	for (int i = 0; i < 20; i++)
+		for (int j = 0; j < 4; j++)
+			rs[i][j] = -1;
+	results(arr, rs, row, col);
+	for (int i = 0; i < 20; i++)
+	{
+		if (rs[i][0] == -1) {
+			cct_showstr(2 + v2 * 4, 2 + v1 * 2, "◎", arr[v1][v2], 0);
+			cct_showstr(2 + v4 * 4, 2 + v3 * 2, "◎", arr[v3][v4], 7);
+			break;
+		}
+		if ((v1 == rs[i][0] && v2 == rs[i][1] && v3 == rs[i][2] && v4 == rs[i][3]) || (v1 == rs[i][2] && v2 == rs[i][3] && v3 == rs[i][0] && v4 == rs[i][1])) {
+			int t = arr[v1][v2];
+			arr[v1][v2] = arr[v3][v4];
+			arr[v3][v4] = t; 
+			cct_showstr(2 + v2 * 4, 2 + v1 * 2, "◎", arr[v1][v2], 0);
+			cct_showstr(2 + v4 * 4, 2 + v3 * 2, "◎", arr[v3][v4], 0);
+			while (!isFinish(arr, row, col)) {
+				showBall(arr,row,col,1,1);
+				Sleep(100);
+				dropBall(arr, row, col, 1);
+				Sleep(100);
+				fillBall(arr, row, col, 1);
+			}
+			break;
+		}
+	}
 }

@@ -52,6 +52,7 @@ int main()
 				break;
 
 			case 9:
+				fun9();
 				break;
 		}
 	} while (in != 0);
