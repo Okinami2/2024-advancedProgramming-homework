@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d39e322b-34ca-4d2f-8c9b-6777bfb58684}</ProjectGuid>
-    <RootNamespace>My90b2</RootNamespace>
+    <ProjectGuid>{bd2adfc5-4ee5-46ba-8992-1ac69c39dc5f}</ProjectGuid>
+    <RootNamespace>My7b1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,16 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="cmd_console_tools.h" />
-    <ClInclude Include="magic_ball.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="cmd_console_tools.cpp" />
-    <ClCompile Include="magic_ball_base.cpp" />
-    <ClCompile Include="magic_ball_graph.cpp" />
-    <ClCompile Include="magic_ball_main.cpp" />
-    <ClCompile Include="magic_ball_menu.cpp" />
-    <ClCompile Include="magic_ball_tools.cpp" />
+    <ClCompile Include="7-b1.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

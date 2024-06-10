@@ -3,6 +3,8 @@
 #include<cstdlib>
 #include<conio.h>
 
+
+using namespace std;
 /*
 in:keeping reading until read this char
 out:remind customers
@@ -102,71 +104,51 @@ void showArr(int arr[9][9], int row, int col, int showDifferent) {
 	for (int i = 0; i < row + 2; i++)
 	{
 		if (i == 0)
-			std::cout << "  " << '|' << ' ';
+			cout << "  " << '|' << ' ';
 		else if(i == 1)
-			std::cout << "--+--";
+			cout << "--+--";
 		else
-			std::cout << char(i + 63)<<' '<<'|'<<' ';
+			cout << char(i + 63)<<' '<<'|'<<' ';
 		for (int j = 0; j < col; j++)
 		{
 			if (i == 0)
-				std::cout << j + 1 << ' ';
+				cout << j + 1 << ' ';
 			else if (i == 1)
-				std::cout << "--";
+				cout << "--";
 			else if (showDifferent) {
 				if (removable(arr, i - 2, j,row,col)) {
 					cct_setcolor(14, 7);
-					std::cout << arr[i - 2][j];
+					cout << arr[i - 2][j];
 					cct_setcolor(0, 7);
-					std::cout << ' ';
+					cout << ' ';
 				}
 				else
-					std::cout << arr[i - 2][j] << ' ';
+					cout << arr[i - 2][j] << ' ';
 			}
 			else
-				std::cout << arr[i - 2][j] << ' ';
+				cout << arr[i - 2][j] << ' ';
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
-	std::cout << std::endl;
+	cout << endl;
 }
 
 void drop(int arr[][9], int row, int col) {
 	int tmp[9][9];
-	for (int i = 0; i < 9; i++)
-		for (int j = 0; j < 9; j++)
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
 			tmp[i][j] = arr[i][j];
 	for (int i = 0; i < row; i++)
-	{
 		for (int j = 0; j < col; j++)
-		{
-			if (removable(arr, i, j,row,col)) {
+			if (removable(tmp, i, j,row,col)) {
 				for (int k = i; k > 0; k--) {
-					tmp[k][j] = tmp[k - 1][j];
+					arr[k][j] = arr[k - 1][j];
 				}
-				tmp[0][j] = 0;
+				arr[0][j] = 0;
 			}
-		}
-	}
-	for (int i = 0; i < 9; i++)
-		for (int j = 0; j < 9; j++)
-			arr[i][j] = tmp[i][j];
-	int x, y;
-	cct_getxy(x, y);
-	x += 4;
-	y += 2;
-	showArr(arr, row, col, 0);
-	for (int i = 0; i < row; i++)
-	{
-		for (int j = 0; j < col; j++)
-		{
-			if (arr[i][j] == 0)
-				cct_showch(x + j * 2, y + i, '0', 14, 7, 1);
-		}
-	}
-	cct_gotoxy(0, y + row + 1);
+	showArr(arr, row, col, 1);
 	cct_setcolor(0, 7);
-	std::cout << std::endl;
+	cout << endl;
 }
 
 void fill(int arr[][9], int row, int col) {

@@ -15,30 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="magic_ball.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="cmd_console_tools.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="magic_ball_base.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="magic_ball_graph.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="magic_ball_main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="magic_ball_menu.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="magic_ball_tools.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="cmd_console_tools.cpp">
+    <ClCompile Include="7-b1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

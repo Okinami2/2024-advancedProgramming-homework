@@ -14,7 +14,7 @@ int main()
 	 //cct_setconsoleborder();
 	int in;
 	do{
-		cct_setconsoleborder(120, 30);
+		cct_setconsoleborder(120, 30,120,1000);
 		cct_setfontsize("ĞÂËÎÌå", 24);
 		in = menu();
 		switch (in)
