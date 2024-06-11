@@ -82,7 +82,7 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 	while (true) {
 		if (p >= 0 && p < 10) {
 			cct_gotoxy(x + 2, y + 1 + p);
-			cct_showstr(x + 2, y + 1 + p, menu[p], original_para->fg_color, original_para->bg_color);
+			cct_showstr(x + 2, y + 1 + p, menu[p + index], original_para->fg_color, original_para->bg_color);
 		}
 		int in1, in2 = 0;
 		in1= _getch();
@@ -94,14 +94,15 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 		{
 			if(p > 0)
 			{
-				cct_showstr(x + 2, y + 1 + p, menu[p], original_para->bg_color, original_para->fg_color);
+				cct_showstr(x + 2, y + 1 + p, menu[p + index], original_para->bg_color, original_para->fg_color);
 				p--;
 			}
-			else if (p == 0 && index > 0) {
+			else if (p == 0 && index > 0 && row < 10) {
 				index--;
-				for (int i = 0; i < 10 && i < row; i++)
+				for (int i = 0; i < row; i++)
 				{
 					cct_gotoxy(x + 2, y + 1 + i);
+					cct_setcolor(original_para->bg_color, original_para->fg_color);
 					if (strlen(menu[i + index]) < col)
 						cout << setw(original_para->width + 2) << left << menu[i + index];
 					else {
@@ -116,16 +117,17 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 
 		if (in1 == 224 && in2 == 80)//down
 		{
-			if (p < 9)
+			if (p < row - 1 && p < 9)
 			{
-				cct_showstr(x + 2, y + 1 + p, menu[p], original_para->bg_color, original_para->fg_color);
+				cct_showstr(x + 2, y + 1 + p, menu[p + index], original_para->bg_color, original_para->fg_color);
 				p++;
 			}
-			else if (p == 9 && index < 10 - row) {
+			else if (p == row -1 && index < 10 - row && row < 10) {
 				index++;
-				for (int i = 0; i < 10 && i < row; i++)
+				for (int i = 0; i < row; i++)
 				{
 					cct_gotoxy(x + 2, y + 1 + i);
+					cct_setcolor(original_para->bg_color, original_para->fg_color);
 					if (strlen(menu[i + index]) < col)
 						cout << setw(original_para->width + 2) << left << menu[i + index];
 					else {
