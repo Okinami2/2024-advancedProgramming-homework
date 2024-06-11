@@ -1,4 +1,4 @@
-/* 学号 班级 姓名*/
+/* 2352219 陈应波 信11 */
 #define _CRT_SECURE_NO_WARNINGS	
 #include"7-b2.h"
 #include"cmd_console_tools.h"
@@ -21,6 +21,30 @@
   说    明：定义仅本源程序文件需要的函数，设置为static即可
 ***************************************************************************/
 
+static void convert(const char origin[MAX_ITEM_LEN], char out[120], int length) {
+		int j = 0;
+		while (origin[j] != '\0' && j < length && j < 119) {
+			if ((unsigned char)origin[j] >= 0x80) {
+				if (j + 1 >= length || j + 1 >= 119) {
+					break;
+				}
+				out[j] = origin[j];
+				j++;
+				out[j] = origin[j];
+			}
+			else {
+				out[j] = origin[j];
+			}
+			j++;
+		}
+		while (j < length && j < 119) {
+			out[j] = ' ';
+			j++;
+		}
+		out[j] = '\0';
+}
+
+
 
 /***************************************************************************
   函数名称：
@@ -37,9 +61,14 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 	cct_setfontsize("新宋体",16);
     int x = original_para->start_x;
     int y = original_para->start_y;
-    int row = original_para->high + 2;
-    int col = (original_para->width + 4) / 2;
+	int row = original_para->high > 10 ? 10 : original_para->high;
+	int t1 = (original_para->width + 4) % 2 ? (original_para->width + 4) / 2 + 1 : (original_para->width + 4) / 2;
+	int t2 = strlen(original_para->title) % 2 ? strlen(original_para->title) / 2 + 1 : strlen(original_para->title) / 2;
+	int col = (t1 > t2 ? t1 : t2); 
 	
+	char out[10][120];
+	for (int i = 0; i < 10; i++)
+		convert(menu[i], out[i], col * 2);
 	cct_setcolor(original_para->bg_color, original_para->fg_color);
 	for (int i = 0; i < row + 2; i++)
 	{
@@ -64,17 +93,16 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 			cout << "║";
 		cout << endl;
 	}
-	cct_showstr(x + col - strlen(original_para->title)/2 - strlen(original_para->title) % 2 * 2, y, original_para->title, original_para->bg_color, original_para->fg_color);
+	int tx;
+	if (col == t2)
+		tx = x + 2;
+	 else
+		tx = x + col - t2 - 1;
+	cct_showstr(tx, y, original_para->title, original_para->bg_color, original_para->fg_color);
 	for ( int i = 0; i < 10 && i < row; i++)
 	{
 		cct_gotoxy(x + 2, y + 1 + i);
-		if(strlen(menu[i])<col)
-			cout << setw(original_para->width + 2) << left << menu[i];
-		else {
-			char t[255] = { 0 };
-			strncpy(t, menu[i], original_para->width + 4);
-			cout << t;
-		}
+		cout << out[i];
 
 	}
 
@@ -82,7 +110,7 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 	while (true) {
 		if (p >= 0 && p < 10) {
 			cct_gotoxy(x + 2, y + 1 + p);
-			cct_showstr(x + 2, y + 1 + p, menu[p + index], original_para->fg_color, original_para->bg_color);
+			cct_showstr(x + 2, y + 1 + p, out[p + index], original_para->fg_color, original_para->bg_color);
 		}
 		int in1, in2 = 0;
 		in1= _getch();
@@ -94,7 +122,7 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 		{
 			if(p > 0)
 			{
-				cct_showstr(x + 2, y + 1 + p, menu[p + index], original_para->bg_color, original_para->fg_color);
+				cct_showstr(x + 2, y + 1 + p, out[p + index], original_para->bg_color, original_para->fg_color);
 				p--;
 			}
 			else if (p == 0 && index > 0 && row < 10) {
@@ -103,14 +131,7 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 				{
 					cct_gotoxy(x + 2, y + 1 + i);
 					cct_setcolor(original_para->bg_color, original_para->fg_color);
-					if (strlen(menu[i + index]) < col)
-						cout << setw(original_para->width + 2) << left << menu[i + index];
-					else {
-						char t[255] = { 0 };
-						strncpy(t, menu[i + index], original_para->width + 4);
-						cout << t;
-					}
-
+					cout << out[i + index];
 				}
 			}
 		}
@@ -119,7 +140,7 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 		{
 			if (p < row - 1 && p < 9)
 			{
-				cct_showstr(x + 2, y + 1 + p, menu[p + index], original_para->bg_color, original_para->fg_color);
+				cct_showstr(x + 2, y + 1 + p, out[p + index], original_para->bg_color, original_para->fg_color);
 				p++;
 			}
 			else if (p == row -1 && index < 10 - row && row < 10) {
@@ -128,18 +149,12 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 				{
 					cct_gotoxy(x + 2, y + 1 + i);
 					cct_setcolor(original_para->bg_color, original_para->fg_color);
-					if (strlen(menu[i + index]) < col)
-						cout << setw(original_para->width + 2) << left << menu[i + index];
-					else {
-						char t[255] = { 0 };
-						strncpy(t, menu[i + index], original_para->width + 4);
-						cout << t;
-					}
+					cout << out[i + index];
 
 				}
 			}
 		}
 		
 	}
-	return p + 1; //按需返回
+	return p + 1 + index; //按需返回
 }
