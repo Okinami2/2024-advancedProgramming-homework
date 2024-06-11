@@ -1,3 +1,4 @@
+/* 2352219 陈应波 信11 */
 #include <iostream>
 #include"cmd_console_tools.h"
 #include"magic_ball.h"
@@ -115,7 +116,7 @@ void fun6() {
 }
 
 void fun7() {
-	int row = 0, col = 0;
+	int row = 0, col = 0,score = 0;
 	scanRowAndCol(&row, &col);
 	int arr[9][9];
 	initArr(arr, row, col);
@@ -126,7 +127,7 @@ void fun7() {
 	showBall(arr, row, col, 1, 1);
 	while (!isFinish(arr, row, col)) {
 		halt('\r',"按回车键进行消除及下落除0操作...");
-		dropBall(arr, row, col, 1);
+		dropBall(arr, row, col, 1, score);
 		halt('\r', "按回车键进行新值填充...");
 		fillBall(arr, row, col, 1);
 	}
@@ -139,7 +140,7 @@ void fun7() {
 }
 
 void fun8() {
-	int row = 0, col = 0;
+	int row = 0, col = 0, score = 0;
 	scanRowAndCol(&row, &col);
 	int arr[9][9];
 	initArr(arr, row, col);
@@ -149,12 +150,16 @@ void fun8() {
 	showBall(arr, row, col, 1, 1);
 	while (!isFinish(arr, row, col)) {
 		Sleep(100);
-		dropBall(arr, row, col, 1);
+		dropBall(arr, row, col, 1, score);
 		Sleep(100);
 		fillBall(arr, row, col, 1);
 	}
 	Sleep(100);
+	score = 0;
 	if (hint(arr, row, col, 1)) {
+		cct_showstr(14, 0, "(当前分数：  右键退出)");
+		cct_gotoxy(25, 0);//打印分数的地方
+		cout << score;
 		int v1 = 0, v2 = 0;
 		if (select(arr, row, col, &v1, &v2)) {
 			Sleep(500);
@@ -168,7 +173,7 @@ void fun8() {
 }
 
 void fun9() {
-	int row = 0, col = 0;
+	int row = 0, col = 0, score = 0;
 	scanRowAndCol(&row, &col);
 	int arr[9][9];
 	initArr(arr, row, col);
@@ -178,13 +183,17 @@ void fun9() {
 	showBall(arr, row, col, 1, 1);
 	while (!isFinish(arr, row, col)) {
 		Sleep(100);
-		dropBall(arr, row, col, 1);
+		dropBall(arr, row, col, 1, score);
 		Sleep(100);
 		fillBall(arr, row, col, 1);
 	}
 
 	Sleep(100);
+	score = 0;
 	while (hint(arr, row, col, 1)) {
+		cct_showstr(14, 0, "(当前分数：  右键退出)");
+		cct_gotoxy(25, 0);//打印分数的地方
+		cout << score;
 		int v1 = 0, v2 = 0;
 		if (select(arr, row, col, &v1, &v2)) {
 			int v3 = 0, v4 = 0;
@@ -192,7 +201,12 @@ void fun9() {
 			if (v1 == v3 && v2 == v4)
 				cct_showstr(2 + v2 * 4, 2 + v1 * 2, "◎", arr[v1][v2], 7);
 			else {
-				change(arr, row, col, v1, v2, v3, v4);
+				int x, y;
+				cct_getxy(x, y);
+				change(arr, row, col, v1, v2, v3, v4, score);
+				cct_gotoxy(25, 0);//打印分数的地方
+				cout << score;
+				cct_gotoxy(x,y);
 			}
 		}
 		else {

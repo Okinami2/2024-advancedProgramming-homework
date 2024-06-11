@@ -1,3 +1,4 @@
+/* 2352219 ³ÂÓ¦²¨ ÐÅ11 */
 #include"cmd_console_tools.h"
 #include <iostream>
 #include<cstdlib>
@@ -146,7 +147,16 @@ void drop(int arr[][9], int row, int col) {
 				}
 				arr[0][j] = 0;
 			}
-	showArr(arr, row, col, 1);
+	int x, y;
+	cct_getxy(x, y);
+	x += 4;
+	y += 2;
+	showArr(arr, row, col, 0);
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+			if (arr[i][j] == 0)
+				cct_showch(x + j * 2, y + i, '0', 14, 7, 1);
+	cct_gotoxy(0, y + row + 1);
 	cct_setcolor(0, 7);
 	cout << endl;
 }

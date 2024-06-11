@@ -1,3 +1,4 @@
+/* 2352219 陈应波 信11 */
 #include"cmd_console_tools.h"
 #include <iostream>
 #include<cstdlib>
@@ -84,7 +85,7 @@ void showBall(int arr[][9], int row, int col, int hasBorder, int showDifferent) 
 	cct_gotoxy(0, 3 + row + 8 * hasBorder);
 }
 //〇¤
-void dropBall(int arr[][9], int row, int col, int hasBorder) {
+void dropBall(int arr[][9], int row, int col, int hasBorder, int& score) {
 	int tmp[9][9];
 	for (int i = 0; i < 9; i++)
 		for (int j = 0; j < 9; j++)
@@ -93,28 +94,34 @@ void dropBall(int arr[][9], int row, int col, int hasBorder) {
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < col; j++)
 			if (removable(arr, i, j, row, col)) {
-				for (int k = 0; k < 10; k++) {
-					Sleep(100);
+				for (int k = 0; k < 8; k++) {
+					Sleep(50);
 					cct_showstr(x + j * 2 * (1 + hasBorder), y + i * (hasBorder + 1), "〇", arr[i][j], 0);
-					Sleep(100);
+					Sleep(50);
 					cct_showstr(x + j * 2 * (1 + hasBorder), y + i * (hasBorder + 1), "¤", arr[i][j], 0);
 				}
+				tmp[i][j] = 0;
+				score++;
 				cct_showstr(x + j * 2 * (1 + hasBorder), y + i * (hasBorder + 1), "  ", 7, 7);
 			}
-	for (int i = 0; i < row; i++)
-		for (int j = 0; j < col; j++)
-			if (removable(arr, i, j, row, col)) {
-				for (int k = i; k > 0; k--) {
-					tmp[k][j] = tmp[k - 1][j];
+	for (int i = col - 1; i >= 0; i--)
+	{
+		for(int j = 0; j<row;j++){
+			if (tmp[j][i] == 0) {
+				for (int k = j; k > 0; k--) {
+					tmp[k][i] = tmp[k - 1][i];
 					Sleep(100);
-					if(tmp[k - 1][j] == 0)
-						cct_showstr(x + j * 2 * (1 + hasBorder), y + k * (hasBorder + 1), "  ", 7, 7);
+					if (tmp[k - 1][i] == 0)
+						cct_showstr(x + i * 2 * (1 + hasBorder), y + k * (hasBorder + 1), "  ", 7, 7);
 					else
-						cct_showstr(x + j * 2 * (1 + hasBorder), y + k * (hasBorder + 1), "〇",tmp[k][j], 0);
-					cct_showstr(x + j * 2 * (1 + hasBorder), y + (k - 1) * (hasBorder + 1), "  ", 7, 7);
+						cct_showstr(x + i * 2 * (1 + hasBorder), y + k * (hasBorder + 1), "〇", tmp[k][i], 0);
+					cct_showstr(x + i * 2 * (1 + hasBorder), y + (k - 1) * (hasBorder + 1), "  ", 7, 7);
 				}
-				tmp[0][j] = 0;
+				tmp[0][i] = 0;
 			}
+		}
+				
+	}
 	for (int i = 0; i < 9; i++)
 		for (int j = 0; j < 9; j++)
 			arr[i][j] = tmp[i][j];
@@ -194,13 +201,11 @@ int canSelect(int arr[][9], int row, int col, int mX, int mY) {
 }
 
 int select(int arr[][9], int row, int col, int *v1, int *v2) {
-	int score = 0;
 	int rs[20][4];
 	for (int i = 0; i < 20; i++)
 		for (int j = 0; j < 4; j++)
 			rs[i][j] = -1;
 	results(arr, rs, row, col);
-	cct_showstr(14, 0, "(当前分数：0 右键退出)");
 	cct_gotoxy(0, 2 + 2 * row);
 	cct_enable_mouse();
 	int mX, mY, mAction, kValue1, kValue2;
@@ -235,7 +240,7 @@ int select(int arr[][9], int row, int col, int *v1, int *v2) {
 	}
 }
 
-void change(int arr[][9], int row, int col, int v1, int v2, int v3, int v4) {
+void change(int arr[][9], int row, int col, int v1, int v2, int v3, int v4, int& score) {
 	int rs[20][4];
 	for (int i = 0; i < 20; i++)
 		for (int j = 0; j < 4; j++)
@@ -257,7 +262,7 @@ void change(int arr[][9], int row, int col, int v1, int v2, int v3, int v4) {
 			while (!isFinish(arr, row, col)) {
 				showBall(arr,row,col,1,1);
 				Sleep(100);
-				dropBall(arr, row, col, 1);
+				dropBall(arr, row, col, 1, score);
 				Sleep(100);
 				fillBall(arr, row, col, 1);
 			}

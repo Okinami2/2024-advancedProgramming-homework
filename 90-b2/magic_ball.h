@@ -1,3 +1,4 @@
+/* 2352219 ³ÂÓ¦²¨ ÐÅ11 */
 #pragma once
 
 int menu();
@@ -14,12 +15,12 @@ void results(int arr[][9], int rs[][4], int row, int col);
 void showRs(int arr[][9], int row, int col, int rs[][4]);
 void showGraph(int arr[][9], int row, int col, int showBorder);
 void showBall(int arr[][9], int row, int col, int showBorder, int showDifferent);
-void dropBall(int arr[][9], int row, int col, int hasBorder);
+void dropBall(int arr[][9], int row, int col, int hasBorder, int& score);
 void fillBall(int arr[][9], int row, int col, int hasBorder);
 int hint(int arr[][9], int row, int col, int hasBorder);
 int positionValid(int arr[][9], int row, int col, int mX, int mY, int *v1, int *v2);
 int select(int arr[][9], int row, int col, int* v1, int* v2);
-void change(int arr[][9], int row, int col, int v1, int v2, int v3, int v4);
+void change(int arr[][9], int row, int col, int v1, int v2, int v3, int v4, int& socre);
 void theEnd();
 void fun1();
 void fun2();
