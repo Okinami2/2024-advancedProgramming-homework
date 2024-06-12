@@ -52,7 +52,6 @@ int main()
 		" 0.退出",
 		NULL
 	};
-
 	if (1) {
 		cct_setconsoleborder(120, 35);
 		cct_cls();
@@ -66,7 +65,6 @@ int main()
 		parameter.high = 15;	//不含菜单框上下框线，如果超过了菜单的实际项数，则缩为实际项数
 		parameter.bg_color = COLOR_BLACK;	//背景色
 		parameter.fg_color = COLOR_HWHITE; //前景色
-
 		/* 调用pop_menu函数，返回选择的菜单项数（从1开始计数）*/
 		int ret = pop_menu(menu, &parameter);
 

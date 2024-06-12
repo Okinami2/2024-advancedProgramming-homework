@@ -166,7 +166,7 @@ int positionValid(int arr[][9], int row, int col, int mX, int mY, int *v1, int *
 	{
 		for (int j = 0; j < col; j++)
 		{
-			if (mX == 2 + j * 4 && mY == 2 + i * 2) {
+			if ((mX == 2 + j * 4 || mX == 2 + j * 4 + 1) && mY == 2 + i * 2) {
 				*v1 = i;
 				*v2 = j;
 				flag = 1;

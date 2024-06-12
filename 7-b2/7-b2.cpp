@@ -61,13 +61,16 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 	cct_setfontsize("ÐÂËÎÌå",16);
     int x = original_para->start_x;
     int y = original_para->start_y;
-	int row = original_para->high > 10 ? 10 : original_para->high;
+	int menuLen = 0;
+	while (menu[++menuLen][0] != NULL)
+		;
+	int row = original_para->high > menuLen ? menuLen : original_para->high;
 	int t1 = (original_para->width + 4) % 2 ? (original_para->width + 4) / 2 + 1 : (original_para->width + 4) / 2;
 	int t2 = strlen(original_para->title) % 2 ? strlen(original_para->title) / 2 + 1 : strlen(original_para->title) / 2;
 	int col = (t1 > t2 ? t1 : t2); 
 	
-	char out[10][120];
-	for (int i = 0; i < 10; i++)
+	char out[MAX_ITEM_LEN][120];
+	for (int i = 0; i < menuLen; i++)
 		convert(menu[i], out[i], col * 2);
 	cct_setcolor(original_para->bg_color, original_para->fg_color);
 	for (int i = 0; i < row + 2; i++)
@@ -99,7 +102,7 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 	 else
 		tx = x + col - t2 - 1;
 	cct_showstr(tx, y, original_para->title, original_para->bg_color, original_para->fg_color);
-	for ( int i = 0; i < 10 && i < row; i++)
+	for ( int i = 0; i < menuLen && i < row; i++)
 	{
 		cct_gotoxy(x + 2, y + 1 + i);
 		cout << out[i];
@@ -108,7 +111,7 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 
 	int p = 0, index = 0;
 	while (true) {
-		if (p >= 0 && p < 10) {
+		if (p >= 0 && p < menuLen) {
 			cct_gotoxy(x + 2, y + 1 + p);
 			cct_showstr(x + 2, y + 1 + p, out[p + index], original_para->fg_color, original_para->bg_color);
 		}
@@ -125,7 +128,7 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 				cct_showstr(x + 2, y + 1 + p, out[p + index], original_para->bg_color, original_para->fg_color);
 				p--;
 			}
-			else if (p == 0 && index > 0 && row < 10) {
+			else if (p == 0 && index > 0 && row < menuLen) {
 				index--;
 				for (int i = 0; i < row; i++)
 				{
@@ -138,12 +141,12 @@ int pop_menu(const char menu[][MAX_ITEM_LEN], const struct PopMenu* original_par
 
 		if (in1 == 224 && in2 == 80)//down
 		{
-			if (p < row - 1 && p < 9)
+			if (p < row - 1 && p < menuLen - 1)
 			{
 				cct_showstr(x + 2, y + 1 + p, out[p + index], original_para->bg_color, original_para->fg_color);
 				p++;
 			}
-			else if (p == row -1 && index < 10 - row && row < 10) {
+			else if (p == row -1 && index < menuLen - row && row < menuLen) {
 				index++;
 				for (int i = 0; i < row; i++)
 				{
