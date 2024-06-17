@@ -1,4 +1,3 @@
-/* 2352219 ³ÂÓ¦²¨ ÐÅ11 */
 #define _CRT_SECURE_NO_WARNINGS	
 #include"7-b2.h"
 #include"cmd_console_tools.h"

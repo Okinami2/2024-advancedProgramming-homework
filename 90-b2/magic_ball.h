@@ -1,4 +1,3 @@
-/* 2352219 ³ÂÓ¦²¨ ÐÅ11 */
 #pragma once
 
 int menu();

@@ -1,4 +1,4 @@
-/* ÐÅ11 2352219 ³ÂÓ¦²¨*/
+
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>

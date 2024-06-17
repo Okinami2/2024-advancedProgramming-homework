@@ -1,4 +1,4 @@
-/* 2352219 ÐÅ11 ³ÂÓ¦²¨ */
+
 #include <iostream>
 #include <iomanip>
 #include <Windows.h>

@@ -1,4 +1,4 @@
-/* 2352219 ³ÂÓ¦²¨ ÐÅ11 */
+
 #include <iostream>
 #include"cmd_console_tools.h"
 #include"magic_ball.h"

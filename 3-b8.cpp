@@ -1,4 +1,4 @@
-/*2352219 Ёбс╕╡╗ пе11*/
+
 
 #include<iostream>
 #include<iomanip>

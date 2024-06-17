@@ -1,5 +1,3 @@
-/* пе11 2352219 Ёбс╕╡╗*/
-
 
 #include <iostream>
 #include <limits>

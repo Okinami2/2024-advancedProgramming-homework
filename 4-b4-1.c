@@ -1,4 +1,4 @@
-/* 2352219 ³ÂÓ¦²¨ ÐÅ11 */
+
 #include <stdio.h>
 #include <conio.h>
 #include <time.h>

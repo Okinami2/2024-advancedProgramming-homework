@@ -1,4 +1,4 @@
-/* ÐÅ11 2352219 ³ÂÓ¦²¨*/
+
 #include <iostream>
 #include <iomanip>
 #include <cstdio>
