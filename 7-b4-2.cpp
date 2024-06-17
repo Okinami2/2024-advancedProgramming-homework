@@ -1,4 +1,4 @@
-/* 学号 姓名 班级 */
+/* 2352219 陈应波 信11 */
 #include <iostream>
 #include <cmath>
 using namespace std;

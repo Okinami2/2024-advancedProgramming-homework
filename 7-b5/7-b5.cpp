@@ -230,6 +230,7 @@ int main(int argc, char** argv)
 
 	list.sort();
 	list.merge();
+
 	/* 打印 */
 	list.print("最终选课名单");
 
