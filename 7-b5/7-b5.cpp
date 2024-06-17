@@ -194,8 +194,13 @@ int stu_list::print(const char* prompt)
 	for (int i = 0; i < list_merge_num; i++)
 	{
 			cout << left;
-			cout << setw(5) << i + 1 << setw(9) << list_merge[i].stu_no << setw(32) << list_merge[i].stu_name << setw(7) << 'Y';
-			cout<<(list_merge[i].round_2 ? "Y" : "ÍË¿Î") << endl;
+			cout << setw(5) << i + 1 << setw(9) << list_merge[i].stu_no << setw(32) << list_merge[i].stu_name;
+			if (list_merge[i].round_1 && list_merge[i].round_2)
+				cout << setw(7) << 'Y' << 'Y' << endl;
+			else if(list_merge[i].round_1 && !list_merge[i].round_2)
+				cout << setw(7) << 'Y' << "ÍË¿Î" << endl;
+			else if(!list_merge[i].round_1 && list_merge[i].round_2)
+				cout << setw(7) << '/' << "²¹Ñ¡" << endl;
 	}
 	return 0;
 }
