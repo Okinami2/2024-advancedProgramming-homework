@@ -3,19 +3,25 @@
 #include <cmath>
 using namespace std;
 
-class triangle;  //类的提前声明，思考一下，放在这里的目的是为什么
 class point {
 private:
 	int x;
 	int y;
-	friend triangle;
+	//除上面的两个private数据成员外，不再允许添加任何类型的数据成员
 public:
-	/* 仅允许在此添加一个成员函数【仅限1个】,要求体内实现 */
-	void set(int _x, int _y) {
-		x = _x;
-		y = _y;
+	int getx() const //函数声明后加const，表示不允许在本函数中修改数据成员的值 
+	{
+		return x;
 	}
-	/* 除上面允许的那个成员函数外，不再允许添加任何的数据成员和成员函数，但可以根据需要添加其它内容 */
+	int gety() const //函数声明后加const，表示不允许在本函数中修改数据成员的值
+	{
+		return y;
+	}
+	/* 可以定义需要的成员函数，数量不限，并以体内方式实现，不允许添加数据成员 */
+	void set(int x_val, int y_val) {
+		x = x_val;
+		y = y_val;
+	}
 };
 
 class triangle {
@@ -23,16 +29,18 @@ private:
 	point p1;
 	point p2;
 	point p3;
+	//除上面的三个private数据成员外，不再允许添加任何类型的数据成员
 public:
 	/* 根据需要补充相应的语句后完成area函数(形参为空，不准改)，要求：如果三点能构成三角形，则返回面积，否则返回 -1 */
 	double area() {
-		double area_value = 0.5 * abs(p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y));
-		if (area_value == 0) {
-			return -1;
-		}
-		else {
+		int x1 = p1.getx(), y1 = p1.gety();
+		int x2 = p2.getx(), y2 = p2.gety();
+		int x3 = p3.getx(), y3 = p3.gety();
+		double area_value = 0.5 * std::abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+		if (area_value > 0)
 			return area_value;
-		}
+		else
+			return -1;
 	}
 	/* 构造函数 */
 	triangle(int p1_x, int p1_y, int p2_x, int p2_y, int p3_x, int p3_y)
